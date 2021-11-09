@@ -5,7 +5,9 @@ import { PageNotFoundView } from "./views/PageNotFoundView";
 // import BlogLayout from "./layouts/blog/BlogLayout";
 import { MainLayout } from "./layouts/main/MainLayout";
 import { BlogLayout } from "./layouts/blog/BlogLayout";
+import { ComponentPage } from "./views/ComponentPage/ComponentPage";
 import { BlogPage } from "./views/BlogPage/BlogPage";
+import { RegisterPage } from "./views/RegisterPage/RegisterPage";
 
 export const App: React.FC = (): JSX.Element => {
   /**
@@ -20,7 +22,7 @@ export const App: React.FC = (): JSX.Element => {
       { path: "*", element: <Navigate to="/404" /> },
       { path: "404", element: <PageNotFoundView /> },
       { path: "/", element: <Navigate to="/blog" /> },
-      // { path: "login", element: <Login /> },
+      { path: "register", element: <RegisterPage /> },
     ],
   };
 
@@ -29,6 +31,7 @@ export const App: React.FC = (): JSX.Element => {
     element: <BlogLayout />,
     children: [
       { path: "", element: <BlogPage /> },
+      { path: "component", element: <ComponentPage /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   };
