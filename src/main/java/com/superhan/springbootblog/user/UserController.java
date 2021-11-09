@@ -15,21 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api")
 public class UserController {
 
-//    @Autowired
+    // @Autowired
     private final UserService userService;
 
-//    public UserController(UserService userService) {
-//        this.userService = userService;
-//    }
+    // public UserController(UserService userService) {
+    // this.userService = userService;
+    // }
 
-    @PostMapping("/users")
-    public ResponseDto<Integer> save(@RequestBody User user){
+    @PostMapping("/register")
+    public ResponseDto<Integer> save(@RequestBody User user) {
         log.info("UserController Save 호출");
         user.setRole(UserRole.USER);
-        int result = userService.join(user);
+        userService.register(user);
 
-        return new ResponseDto<Integer>(HttpStatus.OK,result);
+        return new ResponseDto<Integer>(HttpStatus.OK, HttpStatus.OK.value(), 1);
     }
-
-
 }
