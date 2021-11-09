@@ -10,16 +10,16 @@ interface User {
 export const registeApi = createApi({
   reducerPath: "registeApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/api" }),
-  tagTypes: ['Users'],
+  tagTypes: [],
   endpoints: (build) => ({
     // Omit을 사용하여 User interface에서 id값을 생략할 수 있다.
     registeUser: build.mutation<User, Omit<User, 'id'>>({
       query: (body) => ({
-        url: `users`,
+        url: `register`,
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Users']
+      // invalidatesTags: ['Users']
     })
   })
 })
