@@ -1,5 +1,7 @@
 package com.superhan.springbootblog.user;
 
+import javax.servlet.http.HttpSession;
+
 import com.superhan.springbootblog.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/auth")
 public class UserController {
 
     // @Autowired
@@ -22,11 +24,24 @@ public class UserController {
     // this.userService = userService;
     // }
 
+    private final HttpSession session;
+
     @PostMapping("/register")
-    public ResponseDto<Integer> save(@RequestBody User user) {
-        log.info("UserController Save 호출");
+    public ResponseDto<Integer> register(@RequestBody User user) {
+        log.info("UserController Register 호출");
         user.setRole(UserRole.USER);
         userService.register(user);
+
+        return new ResponseDto<Integer>(HttpStatus.OK, HttpStatus.OK.value(), 1);
+    }
+
+    @PostMapping("/login")
+    public ResponseDto<Integer> login(@RequestBody User user) {
+        log.info("UserController Login 호출");
+        User principal = userService.login(user);
+        if (principal != null) {
+            session.setAttribute("principal", principal);
+        }
 
         return new ResponseDto<Integer>(HttpStatus.OK, HttpStatus.OK.value(), 1);
     }

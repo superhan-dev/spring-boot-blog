@@ -24,4 +24,10 @@ public class UserService {
     public void register(User user) {
         userRepository.save(user);
     }
+
+    // Select 할 때 트렌젝션 시작, 서비스 종료시에 트랜젝션 종료 (정합성)
+    @Transactional(readOnly = true)
+    public User login(User user) {
+        return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+    }
 }
