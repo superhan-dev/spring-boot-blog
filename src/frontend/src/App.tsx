@@ -5,9 +5,11 @@ import { PageNotFoundView } from "./views/PageNotFoundView";
 // import BlogLayout from "./layouts/blog/BlogLayout";
 import { MainLayout } from "./layouts/main/MainLayout";
 import { BlogLayout } from "./layouts/blog/BlogLayout";
-import { ComponentPage } from "./views/ComponentPage/ComponentPage";
-import { BlogPage } from "./views/BlogPage/BlogPage";
-import { RegisterPage } from "./views/RegisterPage/RegisterPage";
+import { ComponentPage, BlogPage, RegisterPage, LoginPage } from "./views";
+import { BlogAdminPage } from "./views/admin/BlogAdminPage/BlogAdminPage";
+import { UserAdminPage } from "./views/admin/UserAdminPage/UserAdminPage";
+import { AdminLayout } from "./layouts/admin/AdminLayout";
+import { RequireAuth } from "./features/auth/RequireAuth";
 
 export const App: React.FC = (): JSX.Element => {
   /**
@@ -23,6 +25,7 @@ export const App: React.FC = (): JSX.Element => {
       { path: "404", element: <PageNotFoundView /> },
       { path: "/", element: <Navigate to="/blog" /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "login", element: <LoginPage /> },
     ],
   };
 
@@ -36,7 +39,22 @@ export const App: React.FC = (): JSX.Element => {
     ],
   };
 
-  const routing = useRoutes([mainRoutes, blogRoutes]);
+  const adminRoutes = {
+    path: "admin",
+    element: (
+      <RequireAuth>
+        <AdminLayout />
+      </RequireAuth>
+    ),
+    children: [
+      { path: "", element: <BlogAdminPage /> },
+      { path: "blog", element: <BlogAdminPage /> },
+      { path: "user", element: <UserAdminPage /> },
+      { path: "*", element: <Navigate to="/404" /> },
+    ],
+  };
+
+  const routing = useRoutes([mainRoutes, blogRoutes,adminRoutes]);
 
   return <>{routing}</>;
 };
