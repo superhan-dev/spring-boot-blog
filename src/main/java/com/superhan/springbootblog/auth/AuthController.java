@@ -51,7 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthTokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword());
@@ -60,24 +60,11 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.createToken(authentication);
+        User user = userService.getUserWithAuthorities(authenticationToken.getName()).get();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new AuthTokenDto(jwt,user), httpHeaders, HttpStatus.OK);
     }
-
-    // @PostMapping("/login")
-    // public ResponseDto<Integer> login(@RequestBody User user) {
-    // log.info("UserController Login 호출");
-    // User principal = userService.login(user);
-    // if (principal != null) {
-    // session.setAttribute("principal", principal);
-    // return new ResponseDto<Integer>(HttpStatus.OK, HttpStatus.OK.value(), 1);
-    // }
-
-    // return new ResponseDto<Integer>(HttpStatus.NOT_FOUND,
-    // HttpStatus.NOT_FOUND.value(), -1);
-
-    // }
 }
