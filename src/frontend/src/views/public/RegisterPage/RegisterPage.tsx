@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Grid } from "@mui/material";
 import { Box } from "@mui/system";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { RegisterForm } from "./RegisterForm";
 
 export const RegisterPage = () => {
@@ -16,7 +16,7 @@ export const RegisterPage = () => {
           position: "relative",
           alignItems: "center",
           backgroundImage:
-            "url(" + require("../../assets/image/landing-bg.jpg").default + ")",
+            "url(" + require("../../../assets/image/landing-bg.jpg").default + ")",
         }}
       >
         <Container>

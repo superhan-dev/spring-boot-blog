@@ -2,13 +2,13 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
-import { BlogTemplate } from "../../layouts/blog/BlogTemplate";
+import { BlogTemplate } from "../../../layouts/blog/BlogTemplate";
 import { BlogList } from "./BlogList";
 
 export const BlogPage = () => {
   return (
     <BlogTemplate
-      image={require("../../assets/image/bg4.jpg").default}
+      image={require("../../../assets/image/bg4.jpg").default}
       slogan={
         <Box sx={{ color: "#FFFFFF", textAlign: "left" }}>
           <Typography

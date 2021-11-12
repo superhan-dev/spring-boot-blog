@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -22,7 +22,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useRegisteUserMutation } from "../../features/register/registeApi";
+import { useRegisterMutation } from "../../../features/auth/authApi";
+import { useSnackbar } from "notistack";
 
 interface RegisterFormProps {
   username: string;
@@ -52,7 +53,15 @@ const defaultValues: RegisterFormProps = {
 };
 
 export const RegisterForm = () => {
-  const [registeUser, { isLoading }] = useRegisteUserMutation();
+  const [register, { isLoading, isSuccess }] = useRegisterMutation();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (isSuccess) {
+      enqueueSnackbar("registration success", { variant: "success" });
+    }
+  }, [isSuccess]);
 
   const { control, handleSubmit, reset, formState } =
     useForm<RegisterFormProps>({
@@ -77,7 +86,7 @@ export const RegisterForm = () => {
     const { username, email, password } = values;
     // submit logic 정의
     try {
-      await registeUser({
+      await register({
         username: username,
         email: email,
         password: password,
@@ -85,6 +94,7 @@ export const RegisterForm = () => {
       reset();
     } catch (error) {
       console.log("handleSubmit error", error);
+      enqueueSnackbar("registration fail", { variant: "error" });
     }
   });
 

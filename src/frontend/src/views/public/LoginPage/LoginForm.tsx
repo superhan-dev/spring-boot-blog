@@ -22,11 +22,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useLoginMutation } from "../../features/auth/authApi";
+import { useLoginMutation } from "../../../features/auth/authApi";
 
-import { VariantType, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
+import { useLocation, useNavigate } from "react-router";
 
-interface LoginFormProps {
+
+export interface LoginFormProps {
   username: string;
   password: string;
 }
@@ -43,26 +45,27 @@ const defaultValues: LoginFormProps = {
 };
 
 export const LoginForm = () => {
-  const [login, { status, isLoading, isSuccess, isError, data }] =
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [login, { status, isLoading, isSuccess, isError }] =
     useLoginMutation();
 
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    console.log("Success", status, isSuccess, data);
-    // if (isSuccess && data.code === 200) {
-    //   enqueueSnackbar("로그인 성공", { variant: "success" });
-    // } else {
-    //   enqueueSnackbar("로그인 실패", { variant: "error" });
-    // }
-  }, [isSuccess, status]);
+    let from = location.state?.from?.pathname || "/";
+
+    if (isSuccess) {
+      enqueueSnackbar("로그인 성공", { variant: "success" });
+      navigate(from, { replace: true });
+    }
+  }, [isSuccess, status, enqueueSnackbar, navigate, location]);
 
   useEffect(() => {
-    console.log("Error", status, isError, data);
     if (isError) {
       enqueueSnackbar("로그인 실패", { variant: "error" });
     }
-  }, [isError, status]);
+  }, [isError, status, enqueueSnackbar]);
 
   const { control, handleSubmit, reset, formState } = useForm<LoginFormProps>({
     mode: "onBlur", // | mode: "onChange"
