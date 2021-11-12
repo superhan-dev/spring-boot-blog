@@ -18,13 +18,17 @@ public class UserController {
   private final UserService userService;
   private final UserRepository userRepository;
 
-  @GetMapping("/user/{username}")
+  // 사용자 권한이 ADMIN인 계정만 접근가능한 서비스
+  // 특정 사용자의 정보를 조회하기 위한 서비스
+  @GetMapping("/users/{username}")
   @PreAuthorize("hasAnyRole('ADMIN')")
   public ResponseEntity<User> getUserInfo(@PathVariable String username) {
-    return ResponseEntity.ok(userService.getUserWithAuthorities(username).get());
+    return username != "me" ? ResponseEntity.ok(userService.getUserWithAuthorities(username).get()) : null;
   }
 
-  @GetMapping("/user")
+  // 사용자 권한이 USER 또는 ADMIN인 계정만 접근가능한 서비스
+  // 현재 로그인 중인 사용자가 자기 자신을 확인하기 위한 서비스
+  @GetMapping("/users/me")
   @PreAuthorize("hasAnyRole('USER','ADMIN')")
   public ResponseEntity<User> getMyUserInfo() {
     return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());

@@ -19,17 +19,17 @@ import java.sql.Timestamp;
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long replyId;
 
     @Column(nullable = false, length = 200)
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="boardId")
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @ManyToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @CreationTimestamp
