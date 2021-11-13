@@ -22,7 +22,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.RequiredArgsConstructor;
 
 @Configuration // 빈 등록(IoC)
-@EnableWebSecurity // 시큐리티 필터 추가
+/**
+ * @EnableWebSecurity를 사용하면 자동으로 AuthenticationPrincipalArgumentResolver를 설정파일에 설정한다.
+ * 
+ */
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 의미
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

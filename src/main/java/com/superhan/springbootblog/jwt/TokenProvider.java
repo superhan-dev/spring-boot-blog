@@ -4,13 +4,18 @@ import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.superhan.springbootblog.auth.Authority;
+import com.superhan.springbootblog.user.User;
+
+import com.superhan.springbootblog.user.UserRepository;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+// import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -32,6 +37,9 @@ public class TokenProvider implements InitializingBean {
   private final long tokenValidityInMilliseconds;
 
   private Key key;
+
+  @Autowired
+  private UserRepository userRepository;
 
   public TokenProvider(@Value("${jwt.secret}") String secret,
       @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
@@ -63,7 +71,7 @@ public class TokenProvider implements InitializingBean {
         .stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
 
-    User principal = new User(claims.getSubject(), "", authorities);
+    User principal = userRepository.findOneWithAuthoritiesByUsername(claims.getSubject()).get();
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }
 

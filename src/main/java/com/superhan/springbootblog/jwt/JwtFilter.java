@@ -2,6 +2,7 @@ package com.superhan.springbootblog.jwt;
 
 import java.io.IOException;
 
+import javax.security.auth.message.AuthException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -13,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +36,7 @@ public class JwtFilter extends GenericFilterBean {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     String jwt = resolveToken(httpServletRequest);
     String requestURI = httpServletRequest.getRequestURI();
-
+    
     if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
       Authentication authentication = tokenProvider.getAuthentication(jwt);
       SecurityContextHolder.getContext().setAuthentication(authentication);
