@@ -64,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests() // 요청이 들어오면 동작
+                .antMatchers("/api/boards/**").permitAll() // 특정 요청으로 들어오면 모든서비스를 허용한다.
                 .antMatchers("/auth/**").permitAll() // 특정 요청으로 들어오면 모든서비스를 허용한다.
                 .antMatchers("/index*", "/static/**", "/*.js", "/*.json", "/*.ico").permitAll()
                 .anyRequest()
